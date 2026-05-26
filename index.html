@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KDN 웹 테스트</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #003087;
+      --blue-light: #1A73E8;
+      --accent: #F5A623;
+      --white: #ffffff;
+      --gray: #f5f7fa;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--gray);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(0,48,135,0.12);
+      padding: 48px 40px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #e8f0fe;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 50px;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      background: #10B981;
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .logo {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 900; color: white;
+      margin: 0 auto 20px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #718096;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .info-item {
+      background: var(--gray);
+      border-radius: 12px;
+      padding: 16px 12px;
+    }
+    .info-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #a0aec0;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .info-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    #clock { color: var(--blue); }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 36px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,48,135,0.25); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-ghost {
+      background: transparent;
+      border: 2px solid #e2e8f0;
+      color: #4a5568;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+    }
+    .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+    #message {
+      margin-top: 20px;
+      padding: 14px;
+      background: #e8f0fe;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue);
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    #counter-wrap { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+    #count {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--blue);
+      min-width: 60px;
+      text-align: center;
+    }
+    .count-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 2px solid #e2e8f0;
+      background: white;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--blue);
+      transition: all 0.15s;
+    }
+    .count-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+
+    footer {
+      margin-top: 32px;
+      font-size: 12px;
+      color: #a0aec0;
+    }
+    footer strong { color: var(--blue); }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="badge">
+      <span class="dot"></span>
+      배포 성공 · LIVE
+    </div>
+
+    <div class="logo">K</div>
+
+    <h1>KDN 웹 테스트</h1>
+    <p class="subtitle">GitHub Pages 배포가 정상적으로 완료됐어요! 🎉<br />이 페이지는 단일 HTML 파일로 동작합니다.</p>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">현재 시각</div>
+        <div class="info-value" id="clock">--:--:--</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">오늘 날짜</div>
+        <div class="info-value" id="date">--</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">브라우저</div>
+        <div class="info-value" id="browser">--</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">화면 크기</div>
+        <div class="info-value" id="screen">--</div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="showMessage()">👋 반갑습니다 클릭!</button>
+    <button class="btn-ghost" onclick="resetMessage()">초기화</button>
+
+    <div id="message"></div>
+
+    <div id="counter-wrap">
+      <button class="count-btn" onclick="changeCount(-1)">−</button>
+      <span id="count">0</span>
+      <button class="count-btn" onclick="changeCount(1)">+</button>
+    </div>
+  </div>
+
+  <footer>Deployed via <strong>GitHub Pages</strong> · wonseop-kdn/web-test</footer>
+
+  <script>
+    // 시계
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent =
+        now.toLocaleTimeString('ko-KR');
+      document.getElementById('date').textContent =
+        now.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // 브라우저/화면
+    const ua = navigator.userAgent;
+    const br = ua.includes('Chrome') ? 'Chrome'
+             : ua.includes('Firefox') ? 'Firefox'
+             : ua.includes('Safari') ? 'Safari'
+             : ua.includes('Edge') ? 'Edge' : '기타';
+    document.getElementById('browser').textContent = br;
+    document.getElementById('screen').textContent = window.innerWidth + ' × ' + window.innerHeight;
+
+    // 버튼
+    const greetings = [
+      '안녕하세요! 배포가 잘 됐죠? 😊',
+      '오늘도 좋은 하루 되세요! ☀️',
+      '바이브코딩으로 만든 페이지예요 🤖',
+      'KDN 웹 테스트 성공! 🚀',
+      '클릭할수록 새 메시지! 🎲',
+    ];
+    let gi = 0;
+    function showMessage() {
+      const el = document.getElementById('message');
+      el.textContent = greetings[gi % greetings.length];
+      el.style.display = 'block';
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+      gi++;
+    }
+    function resetMessage() {
+      document.getElementById('message').style.display = 'none';
+      gi = 0;
+    }
+
+    // 카운터
+    let count = 0;
+    function changeCount(n) {
+      count = Math.max(0, count + n);
+      document.getElementById('count').textContent = count;
+    }
+  </script>
+
+</body>
+</html>
