@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>강좌 목록 - KDN 바이브코딩 아카데미</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23003087'/><text y='72' x='50' text-anchor='middle' font-size='60' font-family='sans-serif' font-weight='900' fill='white'>K</text></svg>" />
+</head>
+<body>
+
+  <!-- Top Utility Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-links">
+        <a href="#">공지사항</a>
+        <a href="#">채용정보</a>
+        <a href="#">사이트맵</a>
+        <a href="#">관련기관</a>
+      </div>
+      <div class="top-bar-right">
+        <span>📚 총 48개 강좌 운영 중</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="logo">
+          <div class="logo-badge">K</div>
+          <div class="logo-text">
+            <strong>KDN 바이브코딩</strong>
+            <span>AI 코딩 학습 아카데미</span>
+          </div>
+        </a>
+        <nav class="main-nav">
+          <a href="index.html">홈</a>
+          <a href="courses.html" class="active">강좌</a>
+          <a href="playground.html">코드 실습</a>
+          <a href="index.html#roadmap">학습 로드맵</a>
+          <a href="index.html#community">커뮤니티</a>
+          <a href="index.html#notice">공지사항</a>
+        </nav>
+        <div class="header-actions">
+          <a href="#" class="btn-outline">로그인</a>
+          <a href="#" class="btn-primary">무료로 시작</a>
+        </div>
+        <button class="hamburger" onclick="openMobileNav()" aria-label="메뉴 열기">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav" id="mobileNav" onclick="closeMobileNav()">
+    <div class="mobile-nav-panel" onclick="event.stopPropagation()">
+      <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+      <a href="index.html">🏠 홈</a>
+      <a href="courses.html">📚 강좌</a>
+      <a href="playground.html">💻 코드 실습</a>
+      <a href="index.html#roadmap">🗺️ 학습 로드맵</a>
+      <a href="index.html#community">💬 커뮤니티</a>
+    </div>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">홈</a>
+        <span>/</span>
+        <span>강좌</span>
+      </div>
+      <h1>📚 전체 강좌</h1>
+      <p>AI 도구부터 풀스택 개발까지, 바이브코딩의 모든 것을 배우세요.</p>
+    </div>
+  </div>
+
+  <!-- Courses Page Layout -->
+  <div class="container">
+    <div class="courses-page-layout">
+      <!-- Filter Sidebar -->
+      <aside class="filter-sidebar">
+        <div class="filter-card">
+          <h4>🔍 검색</h4>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="강좌명 검색..."
+            oninput="applyFilters()"
+            style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; outline:none; color:var(--text-dark);"
+          />
+        </div>
+
+        <div class="filter-card">
+          <h4>📂 카테고리</h4>
+          <label class="filter-option">
+            <span>전체</span>
+            <input type="radio" name="category" value="all" checked onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>AI 도구 <span class="filter-count">18</span></span>
+            <input type="radio" name="category" value="AI 도구" onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>웹 개발 <span class="filter-count">12</span></span>
+            <input type="radio" name="category" value="웹 개발" onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>데이터 분석 <span class="filter-count">8</span></span>
+            <input type="radio" name="category" value="데이터 분석" onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>자동화 <span class="filter-count">6</span></span>
+            <input type="radio" name="category" value="자동화" onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>백엔드 <span class="filter-count">4</span></span>
+            <input type="radio" name="category" value="백엔드" onchange="applyFilters()" />
+          </label>
+        </div>
+
+        <div class="filter-card">
+          <h4>📊 난이도</h4>
+          <label class="filter-option">
+            <span>입문</span>
+            <input type="checkbox" value="입문" onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>초급</span>
+            <input type="checkbox" value="초급" onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>중급</span>
+            <input type="checkbox" value="중급" onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>고급</span>
+            <input type="checkbox" value="고급" onchange="applyFilters()" />
+          </label>
+        </div>
+
+        <div class="filter-card">
+          <h4>💰 가격</h4>
+          <label class="filter-option">
+            <span>무료</span>
+            <input type="checkbox" id="filter-free" onchange="applyFilters()" />
+          </label>
+          <label class="filter-option">
+            <span>유료</span>
+            <input type="checkbox" id="filter-paid" onchange="applyFilters()" />
+          </label>
+        </div>
+
+        <button onclick="resetFilters()" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:13px; color:var(--text-mid); background:white; cursor:pointer; transition:var(--transition); font-family:inherit;" onmouseover="this.style.borderColor='var(--kdn-blue)'; this.style.color='var(--kdn-blue)'" onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-mid)'">
+          🔄 필터 초기화
+        </button>
+      </aside>
+
+      <!-- Courses Main -->
+      <div class="courses-main">
+        <div class="courses-toolbar">
+          <span class="courses-count" id="courses-count">총 <strong>12</strong>개 강좌</span>
+          <select class="sort-select" id="sort-select" onchange="applyFilters()">
+            <option value="popular">인기순</option>
+            <option value="new">최신순</option>
+            <option value="price-low">가격 낮은순</option>
+            <option value="price-high">가격 높은순</option>
+          </select>
+        </div>
+
+        <div class="courses-list" id="courses-list">
+          <!-- Cards generated by script -->
+        </div>
+
+        <div id="no-results" style="display:none; text-align:center; padding:60px 20px; color:var(--text-light);">
+          <div style="font-size:48px; margin-bottom:16px;">🔍</div>
+          <p style="font-size:16px;">검색 결과가 없습니다.</p>
+          <p style="font-size:14px; margin-top:8px;">다른 검색어나 필터를 시도해보세요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section" style="margin-top:0;">
+    <div class="container">
+      <h2>아직 어떤 강좌를 선택할지<br />모르겠나요?</h2>
+      <p>학습 로드맵을 따라가면 가장 효율적으로 성장할 수 있습니다.</p>
+      <div class="cta-actions">
+        <a href="index.html#roadmap" class="btn-hero-primary">🗺️ 로드맵 보기</a>
+        <a href="playground.html" class="btn-hero-outline">💻 실습 먼저 체험하기</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-badge-footer">K</div>
+          <strong style="color:white; font-size:18px;">KDN 바이브코딩 아카데미</strong>
+          <p>AI 시대에 필요한 코딩 역량을 갖출 수 있도록 돕는 KDN의 공식 학습 플랫폼입니다.</p>
+        </div>
+        <div class="footer-col">
+          <h4>학습</h4>
+          <div class="footer-links">
+            <a href="courses.html">→ 전체 강좌</a>
+            <a href="index.html#roadmap">→ 학습 로드맵</a>
+            <a href="playground.html">→ 코드 실습</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>커뮤니티</h4>
+          <div class="footer-links">
+            <a href="#">→ 학습 게시판</a>
+            <a href="#">→ Q&A</a>
+            <a href="#">→ 스터디 모집</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>안내</h4>
+          <div class="footer-links">
+            <a href="#">→ 공지사항</a>
+            <a href="#">→ FAQ</a>
+            <a href="#">→ 기업 교육</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 KDN 바이브코딩 아카데미. All rights reserved.</span>
+        <div class="footer-bottom-links">
+          <a href="#">개인정보처리방침</a>
+          <a href="#">이용약관</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="맨 위로">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>

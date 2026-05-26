@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>코드 실습 - KDN 바이브코딩 아카데미</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23003087'/><text y='72' x='50' text-anchor='middle' font-size='60' font-family='sans-serif' font-weight='900' fill='white'>K</text></svg>" />
+  <style>
+    body { background: #13131F; }
+    .playground-header {
+      background: #1E1E2E;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .pg-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .pg-logo .logo-badge { width: 34px; height: 34px; font-size: 14px; }
+    .pg-logo-text { font-size: 14px; font-weight: 700; color: white; }
+    .pg-logo-text span { font-size: 11px; color: rgba(255,255,255,0.4); display: block; }
+    .pg-nav { display: flex; gap: 4px; }
+    .pg-nav a {
+      padding: 6px 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      border-radius: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .pg-nav a:hover { color: white; background: rgba(255,255,255,0.07); }
+    .pg-nav a.active { color: white; background: rgba(255,255,255,0.1); }
+    .pg-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .pg-badge {
+      padding: 4px 12px;
+      background: rgba(139,92,246,0.2);
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 50px;
+      font-size: 12px;
+      color: #C4B5FD;
+    }
+    .pg-user {
+      width: 32px; height: 32px;
+      background: var(--kdn-blue);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: white; font-weight: 700;
+    }
+
+    .pg-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr 320px;
+      height: calc(100vh - 56px);
+    }
+
+    /* Sidebar */
+    .pg-sidebar {
+      background: #1E1E2E;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .pg-sidebar-top {
+      padding: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .pg-sidebar-search {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      font-family: inherit;
+      outline: none;
+    }
+    .pg-sidebar-search:focus { border-color: rgba(139,92,246,0.5); }
+    .pg-sidebar-tabs {
+      display: flex;
+      padding: 10px 14px 0;
+      gap: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .pg-sidebar-tab {
+      flex: 1;
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+    }
+    .pg-sidebar-tab.active {
+      color: rgba(255,255,255,0.9);
+      border-bottom-color: #F5A623;
+    }
+    .pg-challenge-list { overflow-y: auto; flex: 1; }
+    .pg-challenge-item {
+      padding: 14px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .pg-challenge-item:hover { background: rgba(255,255,255,0.04); }
+    .pg-challenge-item.active { background: rgba(245,166,35,0.06); border-left: 3px solid #F5A623; }
+    .pg-ch-header { display: flex; align-items: center; justify-content: space-between; }
+    .pg-ch-num { font-size: 10px; color: rgba(255,255,255,0.25); font-family: monospace; }
+    .pg-ch-status { font-size: 12px; }
+    .pg-ch-name { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; line-height: 1.3; }
+    .pg-ch-tags { display: flex; gap: 4px; }
+    .pg-ch-tag {
+      font-size: 10px;
+      padding: 1px 7px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .tag-easy { background: rgba(16,185,129,0.2); color: #10B981; }
+    .tag-med  { background: rgba(245,158,11,0.2); color: #F59E0B; }
+    .tag-hard { background: rgba(239,68,68,0.2); color: #EF4444; }
+    .tag-ai   { background: rgba(139,92,246,0.2); color: #8B5CF6; }
+
+    /* Editor */
+    .pg-editor { display: flex; flex-direction: column; overflow: hidden; }
+    .pg-editor-header {
+      background: #2D2D3F;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .pg-lang-tabs { display: flex; gap: 4px; }
+    .pg-lang-tab {
+      padding: 5px 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-family: monospace;
+    }
+    .pg-lang-tab.active { background: #1E1E2E; color: white; }
+    .pg-editor-controls { display: flex; gap: 8px; }
+    .pg-ctrl-btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+    }
+    .pg-ctrl-btn.run { background: #10B981; color: white; }
+    .pg-ctrl-btn.run:hover { background: #059669; }
+    .pg-ctrl-btn.reset { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.65); }
+    .pg-ctrl-btn.reset:hover { background: rgba(255,255,255,0.14); }
+    .pg-ctrl-btn.ai-help { background: rgba(139,92,246,0.25); color: #C4B5FD; }
+    .pg-ctrl-btn.ai-help:hover { background: rgba(139,92,246,0.4); }
+    .pg-ctrl-btn.submit { background: #003087; color: white; }
+    .pg-ctrl-btn.submit:hover { background: #0050B3; }
+
+    #code-editor {
+      flex: 1;
+      background: #1E1E2E;
+      color: #CDD6F4;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      padding: 20px 24px;
+      border: none;
+      resize: none;
+      outline: none;
+      overflow: auto;
+      tab-size: 4;
+    }
+    .pg-editor-footer {
+      background: #003087;
+      padding: 5px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      font-family: monospace;
+      flex-shrink: 0;
+    }
+
+    /* Right Panel */
+    .pg-panel {
+      background: #1E1E2E;
+      border-left: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .pg-panel-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .pg-panel-tab {
+      flex: 1;
+      padding: 12px 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+    }
+    .pg-panel-tab.active {
+      color: white;
+      border-bottom-color: #F5A623;
+    }
+
+    .pg-panel-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .tab-pane { display: none; flex: 1; flex-direction: column; overflow: hidden; height: 100%; }
+    .tab-pane.active { display: flex; }
+
+    /* Problem Pane */
+    .problem-pane { padding: 16px; overflow-y: auto; }
+    .problem-title { font-size: 16px; font-weight: 700; color: white; margin-bottom: 8px; }
+    .problem-meta { display: flex; gap: 8px; margin-bottom: 16px; }
+    .problem-body { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.8; }
+    .problem-body h4 { color: rgba(255,255,255,0.9); margin: 16px 0 8px; font-size: 13px; }
+    .problem-body pre {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      color: #A6E3A1;
+      margin: 8px 0;
+    }
+    .problem-body ul { padding-left: 16px; }
+    .problem-body ul li { margin-bottom: 4px; }
+    .hint-box {
+      background: rgba(245,166,35,0.08);
+      border: 1px solid rgba(245,166,35,0.2);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+    }
+    .hint-box strong { color: #F5A623; }
+
+    /* Console Pane */
+    .console-pane { padding: 14px; overflow-y: auto; font-family: monospace; font-size: 13px; line-height: 1.8; flex: 1; }
+    .console-empty { color: rgba(255,255,255,0.25); font-style: italic; }
+    .console-line { margin-bottom: 2px; }
+    .console-line.out { color: #A6E3A1; }
+    .console-line.err { color: #F38BA8; }
+    .console-line.info { color: #89B4FA; }
+    .console-line.warn { color: #FAB387; }
+    .console-line.sys { color: rgba(255,255,255,0.35); }
+
+    /* AI Chat Pane */
+    .ai-chat-pane { display: flex; flex-direction: column; height: 100%; }
+    .ai-messages-wrap { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+    .ai-msg {
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .ai-msg.bot {
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.2);
+      color: rgba(255,255,255,0.85);
+    }
+    .ai-msg.user {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.65);
+      margin-left: 24px;
+    }
+    .ai-msg-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px; }
+    .ai-msg.bot .ai-msg-label { color: #8B5CF6; }
+    .ai-msg.user .ai-msg-label { color: rgba(255,255,255,0.3); }
+    .ai-msg code {
+      background: rgba(255,255,255,0.1);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    .ai-input-wrap {
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .ai-text-input {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 9px 12px;
+      color: white;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      resize: none;
+    }
+    .ai-text-input:focus { border-color: rgba(139,92,246,0.5); }
+    .ai-send-btn {
+      padding: 9px 14px;
+      background: rgba(139,92,246,0.3);
+      color: #C4B5FD;
+      border-radius: 8px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ai-send-btn:hover { background: rgba(139,92,246,0.5); }
+
+    /* Quick prompts */
+    .quick-prompts { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 10px; flex-shrink: 0; }
+    .quick-prompt {
+      font-size: 11px;
+      padding: 4px 10px;
+      background: rgba(139,92,246,0.12);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-radius: 50px;
+      color: #C4B5FD;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quick-prompt:hover { background: rgba(139,92,246,0.25); }
+
+    @media (max-width: 900px) {
+      .pg-sidebar { display: none; }
+      .pg-layout { grid-template-columns: 1fr 280px; }
+    }
+    @media (max-width: 640px) {
+      .pg-layout { grid-template-columns: 1fr; }
+      .pg-panel { display: none; }
+    }
+  </style>
+</head>
+<body class="playground-page">
+
+  <!-- Playground Header -->
+  <header class="playground-header">
+    <a href="index.html" class="pg-logo">
+      <div class="logo-badge" style="width:34px;height:34px;font-size:14px;background:var(--kdn-blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;">K</div>
+      <div class="pg-logo-text">
+        KDN 코드 실습
+        <span>Vibe Coding Playground</span>
+      </div>
+    </a>
+    <nav class="pg-nav">
+      <a href="index.html">홈</a>
+      <a href="courses.html">강좌</a>
+      <a href="playground.html" class="active">실습</a>
+    </nav>
+    <div class="pg-actions">
+      <span class="pg-badge">🏆 배지 3개 획득</span>
+      <div class="pg-user">K</div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="pg-layout">
+
+    <!-- Left: Challenge List -->
+    <aside class="pg-sidebar">
+      <div class="pg-sidebar-top">
+        <input class="pg-sidebar-search" type="text" placeholder="🔍 챌린지 검색..." id="ch-search" oninput="filterChallenges()" />
+      </div>
+      <div class="pg-sidebar-tabs">
+        <div class="pg-sidebar-tab active" onclick="switchSideTab(this, 'all')">전체</div>
+        <div class="pg-sidebar-tab" onclick="switchSideTab(this, 'python')">Python</div>
+        <div class="pg-sidebar-tab" onclick="switchSideTab(this, 'js')">JS</div>
+        <div class="pg-sidebar-tab" onclick="switchSideTab(this, 'ai')">AI</div>
+      </div>
+      <div class="pg-challenge-list" id="challenge-list">
+        <!-- Populated by JS -->
+      </div>
+    </aside>
+
+    <!-- Center: Editor -->
+    <div class="pg-editor">
+      <div class="pg-editor-header">
+        <div class="pg-lang-tabs">
+          <div class="pg-lang-tab active" onclick="switchLang('python', this)">🐍 Python</div>
+          <div class="pg-lang-tab" onclick="switchLang('javascript', this)">🌐 JavaScript</div>
+        </div>
+        <div class="pg-editor-controls">
+          <button class="pg-ctrl-btn reset" onclick="resetCode()">↺ 초기화</button>
+          <button class="pg-ctrl-btn ai-help" onclick="askAI('코드 힌트를 주세요')">🤖 AI 힌트</button>
+          <button class="pg-ctrl-btn run" onclick="runCode()">▶ 실행</button>
+          <button class="pg-ctrl-btn submit" onclick="submitCode()">✓ 제출</button>
+        </div>
+      </div>
+      <textarea id="code-editor" spellcheck="false" onkeydown="handleTab(event)"></textarea>
+      <div class="pg-editor-footer">
+        <span id="lang-status">🐍 Python 3.11</span>
+        <span id="cursor-pos">줄 1, 열 1</span>
+        <span id="run-status">준비됨</span>
+      </div>
+    </div>
+
+    <!-- Right: Panel -->
+    <div class="pg-panel">
+      <div class="pg-panel-tabs">
+        <div class="pg-panel-tab active" onclick="switchPanelTab(this, 'problem')">📋 문제</div>
+        <div class="pg-panel-tab" onclick="switchPanelTab(this, 'console')">⬛ 출력</div>
+        <div class="pg-panel-tab" onclick="switchPanelTab(this, 'ai')">🤖 AI 튜터</div>
+      </div>
+
+      <div class="pg-panel-content">
+        <!-- Problem Tab -->
+        <div class="tab-pane active" id="pane-problem">
+          <div class="problem-pane" id="problem-content">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Console Tab -->
+        <div class="tab-pane" id="pane-console">
+          <div class="console-pane" id="console-output">
+            <div class="console-empty">▶ 실행 버튼을 눌러 코드를 실행하세요.</div>
+          </div>
+        </div>
+
+        <!-- AI Chat Tab -->
+        <div class="tab-pane" id="pane-ai">
+          <div class="ai-chat-pane">
+            <div class="ai-messages-wrap" id="ai-messages">
+              <div class="ai-msg bot">
+                <div class="ai-msg-label">🤖 AI 튜터</div>
+                안녕하세요! 저는 KDN 바이브코딩 AI 튜터입니다. 코드에 대해 궁금한 점이 있으면 무엇이든 물어보세요! 💪
+              </div>
+            </div>
+            <div class="quick-prompts">
+              <button class="quick-prompt" onclick="sendQuickPrompt(this)">💡 힌트 주세요</button>
+              <button class="quick-prompt" onclick="sendQuickPrompt(this)">🐛 오류 설명해줘</button>
+              <button class="quick-prompt" onclick="sendQuickPrompt(this)">✨ 코드 개선 방법</button>
+              <button class="quick-prompt" onclick="sendQuickPrompt(this)">📖 개념 설명</button>
+            </div>
+            <div class="ai-input-wrap">
+              <textarea class="ai-text-input" id="ai-input" placeholder="AI 튜터에게 질문하세요..." rows="2" onkeydown="handleAIInput(event)"></textarea>
+              <button class="ai-send-btn" onclick="sendAIMessage()">↑</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
