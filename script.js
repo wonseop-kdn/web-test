@@ -1,5 +1,8 @@
 /* ===== KDN 바이브코딩 아카데미 - Main Script ===== */
 
+/* JS가 실행되면 애니메이션 모드 활성화 (no-JS 폴백 보호) */
+document.documentElement.classList.add('anim-ready');
+
 /* ===== Scroll & UI Utilities ===== */
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -21,10 +24,31 @@ function closeMobileNav() {
 }
 
 /* ===== Intersection Observer – Fade In ===== */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+function initFadeIn() {
+  const fadeEls = document.querySelectorAll('.fade-in');
+  if (!fadeEls.length) return;
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.05 });
+    fadeEls.forEach(el => io.observe(el));
+  } else {
+    // IO 미지원 환경 폴백: 전부 즉시 표시
+    fadeEls.forEach(el => el.classList.add('visible'));
+  }
+
+  // 300ms 후에도 viewport 내 요소가 hidden이면 강제 표시
+  setTimeout(() => {
+    fadeEls.forEach(el => {
+      if (!el.classList.contains('visible')) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 50) el.classList.add('visible');
+      }
+    });
+  }, 300);
+}
+initFadeIn();
 
 /* ===== Counter Animation (Hero Stats) ===== */
 function animateCounter(el, target, suffix = '') {
