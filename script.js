@@ -40,7 +40,7 @@ navLinksContainer.querySelectorAll('a').forEach(link => {
 });
 
 // Typing effect
-const titles = ['웹 개발자', '문제 해결사', '끊임없이 배우는 사람', 'KDN 개발자'];
+const titles = ['한전KDN 개발자', 'AI 선도자', '전력 IT 전문가', '끊임없이 성장하는 사람'];
 let titleIdx = 0;
 let charIdx = 0;
 let isDeleting = false;
